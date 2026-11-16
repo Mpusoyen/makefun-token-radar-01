@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-Token Radar — implied values for protocols with no token yet</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header>
+  <div class="masthead">
+    <h1>PRE-TOKEN <span>RADAR</span></h1>
+    <p class="tagline">Protocols whose token does not exist yet, ranked by what that token would plausibly be worth — and a concrete plan for farming each one.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+  <section class="model-card">
+    <h2>The model</h2>
+    <p><strong>Implied value = TVL × category multiple × growth × maturity × breadth.</strong>
+    The category multiple is not a guess: it is the median market-cap/TVL the snapshot's own
+    <em>traded</em> protocols in that category actually carry. Growth scales the 7-day TVL change
+    (clamped, so one wild week cannot dominate), maturity rewards protocols that have run for
+    years with no token over ones listed last month, and breadth adds 4% per extra chain.
+    Every number on this page can be traced to the snapshot; change the snapshot and the board changes.</p>
+    <div class="multiples" id="multiples"></div>
+  </section>
+</header>
+<main>
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search name or slug…">
+    <select id="cat"><option value="">All categories</option></select>
+    <select id="chain"><option value="">All chains</option></select>
+    <select id="minTvl">
+      <option value="0">Any TVL</option>
+      <option value="10000000">TVL ≥ $10M</option>
+      <option value="50000000">TVL ≥ $50M (watchlist floor)</option>
+      <option value="250000000">TVL ≥ $250M</option>
+    </select>
+    <label class="check"><input type="checkbox" id="watchOnly"> Watchlist only</label>
+    <span class="count" id="count"></span>
+  </div>
+  <table id="board">
+    <thead>
+      <tr>
+        <th data-sort="rank">#</th>
+        <th data-sort="name">Protocol</th>
+        <th data-sort="category">Category</th>
+        <th data-sort="tvl_usd" class="num">TVL</th>
+        <th data-sort="change_7d" class="num">7d</th>
+        <th data-sort="months_live" class="num">Age</th>
+        <th data-sort="implied_value_usd" class="num">Implied value</th>
+        <th data-sort="multiple" class="num">× TVL</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <section class="live">
+    <h2>Already live — the calibration set</h2>
+    <p>These protocols' tokens already trade. They are not farm targets; their real market-cap/TVL
+    ratios are what calibrate the multiples above. A few, for scale:</p>
+    <div class="live-list" id="live"></div>
+  </section>
+</main>
+<aside id="detail" hidden>
+  <button id="close" aria-label="Close detail">✕</button>
+  <div id="detail-body"></div>
+</aside>
+<footer>Data: DefiLlama snapshot, sealed by make.fun. “Records no token” is what the data says — a protocol may still have a token its record does not carry. Nothing here is financial advice; every farm plan ends with its risk step for a reason.</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
