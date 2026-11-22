@@ -62,6 +62,26 @@ export function parseSnapshot(text: string): Snapshot {
   if (!Array.isArray(raw.protocols) || !Array.isArray(raw.watchlist)) {
     throw new Error('snapshot: protocols and watchlist must be arrays');
   }
+  // Validate the fields the model reads, here at the boundary: a malformed
+  // row would otherwise surface far downstream as a NaN implied value or a
+  // board the gate refuses, with nothing naming the row that caused it.
+  raw.protocols.forEach((p, i) => {
+    const where = `snapshot: protocols[${i}]${typeof p?.slug === 'string' ? ` (${p.slug})` : ''}`;
+    if (typeof p?.slug !== 'string' || typeof p?.name !== 'string' || typeof p?.category !== 'string') {
+      throw new Error(`${where}: slug, name and category must be strings`);
+    }
+    if (!Array.isArray(p.chains) || !p.chains.every((c) => typeof c === 'string')) {
+      throw new Error(`${where}: chains must be an array of strings`);
+    }
+    if (typeof p.tvl_usd !== 'number' || !Number.isFinite(p.tvl_usd) || p.tvl_usd < 0) {
+      throw new Error(`${where}: tvl_usd must be a finite number >= 0`);
+    }
+    for (const field of ['change_7d', 'mcap_usd'] as const) {
+      if (p[field] !== null && (typeof p[field] !== 'number' || !Number.isFinite(p[field]))) {
+        throw new Error(`${where}: ${field} must be a finite number or null`);
+      }
+    }
+  });
   return raw;
 }
 
