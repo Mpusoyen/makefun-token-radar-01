@@ -9,24 +9,29 @@
 <body>
 <header>
   <div class="masthead">
-    <h1>PRE-TOKEN <span>RADAR</span></h1>
-    <p class="tagline">Protocols whose token does not exist yet, ranked by what that token would plausibly be worth — and a concrete plan for farming each one.</p>
-    <div class="stats" id="stats"></div>
+    <div class="mast-main">
+      <div class="kicker">◉ LIVE SWEEP · PRE-TOKEN CONTACTS ONLY</div>
+      <h1>PRE-TOKEN <span>RADAR</span></h1>
+      <p class="tagline">Protocols whose token does not exist yet, ranked by what that token would plausibly be worth — and a concrete plan for farming each one.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <figure class="scope" aria-label="Radar scope: the strongest contacts sit nearest the centre">
+      <svg id="scope-svg" viewBox="0 0 200 200" role="img"></svg>
+      <div class="sweep"></div>
+      <figcaption>Top 14 · centre = strongest · amber = watchlist</figcaption>
+    </figure>
   </div>
-  <section class="model-card">
-    <h2>The model</h2>
-    <p><strong>Implied value = TVL × category multiple × growth × maturity × breadth.</strong>
-    The category multiple is not a guess: it is the median market-cap/TVL the snapshot's own
-    <em>traded</em> protocols in that category actually carry. Growth scales the 7-day TVL change
-    (clamped, so one wild week cannot dominate), maturity rewards protocols that have run for
-    years with no token over ones listed last month, and breadth adds 4% per extra chain.
-    Every number on this page can be traced to the snapshot; change the snapshot and the board changes.</p>
-    <div class="multiples" id="multiples"></div>
+  <section class="picks">
+    <h2>Top contacts — start here</h2>
+    <div class="pick-row" id="picks"></div>
+  </section>
+  <section class="model-line">
+    <p><strong>The model:</strong> implied value = TVL × <em>category multiple</em> × <em>growth</em> × <em>maturity</em> × <em>breadth</em> — every multiple calibrated from the snapshot's own traded protocols, none guessed. Full breakdown below the board.</p>
   </section>
 </header>
 <main>
   <div class="controls">
-    <input id="q" type="search" placeholder="Search name or slug…">
+    <input id="q" type="search" placeholder="Search name or slug…  ( / )">
     <select id="cat"><option value="">All categories</option></select>
     <select id="chain"><option value="">All chains</option></select>
     <select id="minTvl">
@@ -35,8 +40,15 @@
       <option value="50000000">TVL ≥ $50M (watchlist floor)</option>
       <option value="250000000">TVL ≥ $250M</option>
     </select>
-    <label class="check"><input type="checkbox" id="watchOnly"> Watchlist only</label>
     <span class="count" id="count"></span>
+  </div>
+  <div class="chips" id="chips">
+    <button data-preset="all" class="on">All contacts</button>
+    <button data-preset="watch">★ Watchlist</button>
+    <button data-preset="top25">Top 25</button>
+    <button data-preset="growing">▲ Growing 7d</button>
+    <button data-preset="veteran">Veterans · 2y+ no token</button>
+    <button data-preset="fresh">Fresh · under 6 mo</button>
   </div>
   <table id="board">
     <thead>
@@ -48,16 +60,25 @@
         <th data-sort="change_7d" class="num">7d</th>
         <th data-sort="months_live" class="num">Age</th>
         <th data-sort="implied_value_usd" class="num">Implied value</th>
-        <th data-sort="multiple" class="num">× TVL</th>
+        <th>Signal</th>
         <th></th>
       </tr>
     </thead>
     <tbody id="rows"></tbody>
   </table>
+  <section class="model-strip">
+    <h2>How the model is calibrated</h2>
+    <p>The category multiple is the median market-cap/TVL the snapshot's own <em>traded</em> protocols in that
+    category actually carry (categories with fewer than three traded samples fall back to the global median).
+    Growth scales the 7-day TVL change, clamped so one wild week cannot dominate; maturity rewards protocols
+    that have run for years with no token over ones listed last month; breadth adds 4% per extra chain.
+    Every number on this page traces to the snapshot — change the snapshot and the board changes.</p>
+    <div class="multiples" id="multiples"></div>
+  </section>
   <section class="live">
     <h2>Already live — the calibration set</h2>
-    <p>These protocols' tokens already trade. They are not farm targets; their real market-cap/TVL
-    ratios are what calibrate the multiples above. A few, for scale:</p>
+    <p>These protocols' tokens already trade, so they are separated from the board and never ranked as farm targets.
+    Their real market-cap/TVL ratios are what calibrate the multiples above. A few, for scale:</p>
     <div class="live-list" id="live"></div>
   </section>
 </main>
